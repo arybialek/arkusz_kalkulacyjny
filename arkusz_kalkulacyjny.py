@@ -59,8 +59,12 @@ def usr_input():
             if 10.9 <= medium_height <= 15.1: 
                 break
             else:
-                print('Wpisałeś niepoprawną wartość! Spróbuj ponownie.')      
+                print('Wpisałeś niepoprawną wartość! Spróbuj ponownie.')        
+            
+    return length, base_height, subscriber_height, medium_height
 
+########################################################################################################################
+def check_if_los():
     while True:    
         try:
             is_los_condition = str(input("Czy na drodze propagacji fali znajdują się przeszkody? Odpowiedz tak/nie: "))      
@@ -72,11 +76,9 @@ def usr_input():
             if is_los_condition == 'tak' or is_los_condition == 'nie':
                 break
             else:
-                print('Wpisałeś niepoprawną wartość! Spróbuj ponownie.')    
-            
-    return length, base_height, subscriber_height, medium_height, is_los_condition
+                print('Wpisałeś niepoprawną wartość! Spróbuj ponownie.') 
+    return is_los_condition
 
-########################################################################################################################
 
 #counts hp
 def p_height_func(base_height, subscriber_height, medium_height):
@@ -148,26 +150,26 @@ while(loop):
                 "Wybierz model dla, którego chcesz obliczyć straty: \n" + " a) LOS1 \n b) NLOS1 \n c) LOS2 \n d) NLOS2 \n e) Powrót do głownego menu \nTwój wybór: "))
                 if choose in ('a', 'A'):
                     result = usr_input()
-                    length, base_height, subscriber_height, medium_height, _ = result
-                    print("\n\nWpisane wartości: \nodległość między antenami: {0} \nwysokość stacji nadawczej: {1} \nwysokość stacji odbiorczej: {2} \nśrednia wysokość dachów budynków: {3} \nstała częstotliwość sygnału: 2400[MHz]".format(length, base_height, subscriber_height, medium_height))
+                    length, base_height, subscriber_height, medium_height = result
+                    print("\n\nWpisane wartości: \nodległość między antenami: {0} [km]\nwysokość stacji nadawczej: {1} [m]\nwysokość stacji odbiorczej: {2} [m]\nśrednia wysokość dachów budynków: {3} [m]\nstała częstotliwość sygnału: 2400[MHz]".format(length, base_height, subscriber_height, medium_height))
                     print(" \nDla przypadku LOS1 straty propacyacyjne wynoszą: {0} [dB]".format(los1(2400, length, base_height, subscriber_height, medium_height, coefficient_f(p_height_func(base_height, subscriber_height, medium_height), 2400, wave_length))))
 
                 elif choose in ('b', 'B'):
                     result = usr_input()
-                    length, base_height, subscriber_height, medium_height, _ = result
-                    print("\n\nWpisane wartości: \nodległość między antenami: {0} \nwysokość stacji nadawczej: {1} \nwysokość stacji odbiorczej: {2} \nśrednia wysokość dachów budynków: {3} \nstała częstotliwość sygnału: 2400[MHz]".format(length, base_height, subscriber_height, medium_height))
+                    length, base_height, subscriber_height, medium_height = result
+                    print("\n\nWpisane wartości: \nodległość między antenami: {0} [km]\nwysokość stacji nadawczej: {1} [m]\nwysokość stacji odbiorczej: {2} [m]\nśrednia wysokość dachów budynków: {3} [m]\nstała częstotliwość sygnału: 2400[MHz]".format(length, base_height, subscriber_height, medium_height))
                     print(" \nDla przypadku NLOS1 straty propacyacyjne wynoszą: {0} [dB]".format(nlos1(2400, length, base_height, subscriber_height, medium_height)))
                 
                 elif choose in ('c', 'C'):
                     result = usr_input()
-                    length, base_height, subscriber_height, medium_height, _ = result
-                    print("\n\nWpisane wartości: \nodległość między antenami: {0} \nwysokość stacji nadawczej: {1} \nwysokość stacji odbiorczej: {2} \nśrednia wysokość dachów budynków: {3} \nstała częstotliwość sygnału: 2400[MHz]".format(length, base_height, subscriber_height, medium_height))
+                    length, base_height, subscriber_height, medium_height = result
+                    print("\n\nWpisane wartości: \nodległość między antenami: {0} [km]\nwysokość stacji nadawczej: {1} [m]\nwysokość stacji odbiorczej: {2} [m]\nśrednia wysokość dachów budynków: {3} [m]\nstała częstotliwość sygnału: 2400[MHz]".format(length, base_height, subscriber_height, medium_height))
                     print(" \nDla przypadku LOS2 straty propacyacyjne wynoszą: {0} [dB]".format(los2(2400, length, base_height, subscriber_height, medium_height)))
 
                 elif choose in ('d', 'D'):
                     result = usr_input()
-                    length, base_height, subscriber_height, medium_height, _ = result
-                    print("\n\nWpisane wartości: \nodległość między antenami: {0} \nwysokość stacji nadawczej: {1} \nwysokość stacji odbiorczej: {2} \nśrednia wysokość dachów budynków: {3} \nstała częstotliwość sygnału: 2400[MHz]".format(length, base_height, subscriber_height, medium_height))
+                    length, base_height, subscriber_height, medium_height = result
+                    print("\n\nWpisane wartości: \nodległość między antenami: {0} [km]\nwysokość stacji nadawczej: {1} [m]\nwysokość stacji odbiorczej: {2} [m]\nśrednia wysokość dachów budynków: {3} [m]\nstała częstotliwość sygnału: 2400[MHz]".format(length, base_height, subscriber_height, medium_height))
                     print(" \nDla przypadku NLOS2 straty propacyacyjne wynoszą: {0} [dB]".format(nlos2(2400, length, base_height, subscriber_height, medium_height)))
                 
                 elif choose in ('e', 'E'):
@@ -180,9 +182,10 @@ while(loop):
         elif ans == 2:
             print("\nWybrano opcję podania wartości bez ustalonego modelu propagacyjnego. Proszę podać wartości: ")
             result = usr_input()
-            length, base_height, subscriber_height, medium_height, is_los_condition = result
+            length, base_height, subscriber_height, medium_height = result
+            is_los_condition = check_if_los()
 
-            print("\n\nWpisane wartości: \nodległość między antenami: {0} \nwysokość stacji nadawczej: {1} \nwysokość stacji odbiorczej: {2} \nśrednia wysokość dachów budynków: {3} \nstała częstotliwość sygnału: 2400[MHz] \nCzy na drodze propagacji fali znajdują się przeszkody?: {4}".format(length, base_height, subscriber_height, medium_height, is_los_condition))
+            print("\n\nWpisane wartości: \nodległość między antenami: {0} [m]\nwysokość stacji nadawczej: {1} [m]\nwysokość stacji odbiorczej: {2} [m]\nśrednia wysokość dachów budynków: {3} [m]\nstała częstotliwość sygnału: 2400[MHz] \nCzy na drodze propagacji fali znajdują się przeszkody?: {4}".format(length, base_height, subscriber_height, medium_height, is_los_condition))
 
             if subscriber_height >= medium_height and is_los_condition == 'nie':
                 print(" \nJest to przypadek LOS1, a straty propacyacyjne wynoszą: {0} [dB]".format(los1(2400, length, base_height, subscriber_height, medium_height, coefficient_f(p_height_func(base_height, subscriber_height, medium_height), 2400, wave_length))))
