@@ -6,12 +6,6 @@ plt.style.use('ggplot')
 frequency = 2400 #[MHz] 
 wave_length = 300/frequency #[m] 
 
-#changeable variables
-#length = 4 #[km]
-#base_height = 75 #[m]
-#subscriber_height = 25 #[m]
-#medium_height = 13 #[m]
-
 #counts hp
 def p_height_func(base_height, subscriber_height, medium_height):
     p_height = 0.5 * (base_height + subscriber_height) - medium_height
@@ -73,12 +67,9 @@ def length_analize():
         propagation_loss2.append(nlos1(2400, leng, 75, 25, 13))
 
         #SUBPLOT2
-     #   propagation_loss3.append(los2(2400, leng, 32, 7, 13))
-     #   propagation_loss4.append(nlos2(2400, leng, 32, 7, 13))
+        propagation_loss3.append(los2(2400, leng, 32, 7, 13))
+        propagation_loss4.append(nlos2(2400, leng, 32, 7, 13))
 
-        #2nd solution subscriber_height = 3m
-        propagation_loss3.append(los2(2400, leng, 33, 3, 13))
-        propagation_loss4.append(nlos2(2400, leng, 33, 3, 13))
 
     #SUBPLOT1
     propagation_loss1 = np.asarray(propagation_loss1)
@@ -96,7 +87,7 @@ def length_analize():
     plt.subplot(1,2,1)
     plt.plot(length, propagation_loss1,'b-', label = "LOS1")
     plt.plot(length, propagation_loss2,'r-', label = "NLOS1")
-    plt.ylim(90, 300)
+    plt.ylim(100, 280)
     plt.xlim(2,8)
     plt.xticks([2, 4, 6, 8])
     plt.yticks([110, 120, 130, 140, 260, 270, 280])
@@ -108,7 +99,7 @@ def length_analize():
     plt.subplot(1,2,2)
     plt.plot(length, propagation_loss3,'y-', label = "LOS2")
     plt.plot(length, propagation_loss4,'g-', label = "NLOS2")
-    plt.ylim(90, 300)
+    plt.ylim(100, 280)
     plt.xlim(2,8)
     plt.xticks([2, 4, 6, 8])
     plt.yticks([110, 120, 130, 140, 260, 270, 280])
@@ -136,12 +127,8 @@ def base_height_analize():
         propagation_loss2.append(nlos1(2400, 4, height, 25, 13))
 
         #SUBPLOT2
-       # propagation_loss3.append(los2(2400, 4, height, 7, 13))
-       # propagation_loss4.append(nlos2(2400, 4, height, 7, 13))
-
-        #2nd. solution subscriber_height = 3m
-        propagation_loss3.append(los2(2400, 4, height, 3, 13))
-        propagation_loss4.append(nlos2(2400, 4, height, 3, 13))
+        propagation_loss3.append(los2(2400, 4, height, 7, 13))
+        propagation_loss4.append(nlos2(2400, 4, height, 7, 13))
 
     #SUBPLOT1
     propagation_loss1 = np.asarray(propagation_loss1)
@@ -162,7 +149,7 @@ def base_height_analize():
     plt.ylim(100, 340)
     plt.xlim(30,120)
     plt.xticks([30, 60, 90, 120])
-    plt.yticks([110, 120, 130, 140, 260, 280, 300, 320, 340])
+    plt.yticks([110, 120, 130, 140, 260, 280, 300, 320, 340])    
     plt.legend(loc='center right' )
     plt.ylabel('Straty propagacyjne [dB]', horizontalalignment='center', size = 'smaller', fontweight='bold')
     plt.xlabel('Wysokość anteny stacji bazowej [m]', horizontalalignment='center', x=0.5, size = 'smaller', fontweight='bold')
@@ -174,7 +161,7 @@ def base_height_analize():
     plt.ylim(100, 340)
     plt.xlim(30,120)
     plt.xticks([30, 60, 90, 120])
-    plt.yticks([110, 120, 130, 140, 260, 280, 300, 320, 340])
+    plt.yticks([110, 120, 130, 140, 260, 280, 300, 320, 340])    
     plt.ylabel('Straty propagacyjne [dB]', horizontalalignment='center', size = 'smaller', fontweight='bold')
     plt.xlabel('Wysokość anteny stacji bazowej [m]', horizontalalignment='center', x=0.5, size = 'smaller', fontweight='bold')
     plt.legend(loc='center right' )
@@ -191,21 +178,15 @@ def subscriber_height_analize():
     #SUBPLOT2: LOS2, NLOS2
     propagation_loss3 = []
     propagation_loss4 = []
-
-  #  subscriber_height = np.arange(10, 20.5, 0.5)
-
-    #2nd solution subscriber_height (3,30) 
-    subscriber_height = np.arange(3, 30, 0.5)  
+ 
+    subscriber_height = np.arange(13, 39.5, 0.5)  
 
     for height in subscriber_height:
         #SUBPLOT1
         propagation_loss1.append(los1(2400, 4, 75, height, 13, coefficient_f(p_height_func(75, height, 13), 2400, wave_length)))
         propagation_loss2.append(nlos1(2400, 4, 75, height, 13))
 
-   # subscriber_height2 = np.arange(10, 13, 0.01)
-
-   #2nd solution
-    subscriber_height2 = np.arange(3, 13, 0.01)
+    subscriber_height2 = np.arange(3, 12.1, 0.1)
     for height in subscriber_height2:
         #SUBPLOT2
         propagation_loss3.append(los2(2400, 4, 32, height, 13))
@@ -221,19 +202,16 @@ def subscriber_height_analize():
 
 
     #Creates two subplots and unpacks the output array immediately
-    plt.figure(figsize=(13,6)) #tworzy nowe okienko
+    plt.figure(figsize=(13,6))
     plt.suptitle("Wpływ zmiany wysokości anteny stacji abonenckiej na straty propagacyjne", style = 'oblique', fontweight='bold')
     plt.subplots_adjust(wspace = 0.4)
     plt.subplot(1,2,1)
     plt.plot(subscriber_height, propagation_loss1,'b-', label = "LOS1")
     plt.plot(subscriber_height, propagation_loss2,'r-', label = "NLOS1")
-    plt.ylim(110, 270)
-    #plt.xlim(10, 20)
-    #2nd solution
-    plt.xlim(3, 30)
-    #plt.xticks([10, 13, 20])
-    plt.xticks([3, 12, 18, 26, 30])
-    plt.yticks([110, 120, 130, 140, 260, 270])
+    plt.ylim(100, 280)
+    plt.xlim(13, 39)
+    plt.xticks([13, 26, 39])
+    plt.yticks([110, 120, 130, 140, 260, 270, 280])
     plt.legend(loc='center right' )
     plt.ylabel('Straty propagacyjne [dB]', horizontalalignment='center', size = 'smaller', fontweight='bold')
     plt.xlabel('Wysokość anteny stacji abonenckiej [m]', horizontalalignment='center', x=0.5, size = 'smaller', fontweight='bold')
@@ -242,15 +220,10 @@ def subscriber_height_analize():
     plt.subplot(1,2,2)
     plt.plot(subscriber_height2, propagation_loss3,'y-', label = "LOS2")
     plt.plot(subscriber_height2, propagation_loss4,'g-', label = "NLOS2")
-    plt.ylim(110, 270)
-   # plt.xlim(10,13)
-   # plt.xticks([10, 11, 12, 13])
-     #plt.xlim(10, 20)
-    #2nd solution
-    plt.xlim(3, 30)
-    #plt.xticks([10, 13, 20])
-    plt.xticks([3, 12, 18, 26, 30])
-    plt.yticks([110, 120, 130, 140, 260, 270])
+    plt.ylim(100, 280)
+    plt.xlim(3, 12)    
+    plt.xticks([3, 6, 9, 12])
+    plt.yticks([110, 120, 130, 140, 260, 270, 280])
     plt.ylabel('Straty propagacyjne [dB]', horizontalalignment='center', size = 'smaller', fontweight='bold')
     plt.xlabel('Wysokość anteny stacji abonenckiej [m]', horizontalalignment='center', x=0.5, size = 'smaller', fontweight='bold')
     plt.legend(loc='center right' )
@@ -276,13 +249,8 @@ def medium_height_analize():
         propagation_loss2.append(nlos1(2400, 4, 75, 25, height))
 
         #SUBPLOT2
-      #  propagation_loss3.append(los2(2400, 4, 32, 7, height))
-      #  propagation_loss4.append(nlos2(2400, 4, 32, 7, height))
-
-        #2nd. solution
-        propagation_loss3.append(los2(2400, 4, 33, 3, height))
-        propagation_loss4.append(nlos2(2400, 4, 33, 3, height))
-
+        propagation_loss3.append(los2(2400, 4, 32, 7, height))
+        propagation_loss4.append(nlos2(2400, 4, 32, 7, height))
 
     #SUBPLOT1
     propagation_loss1 = np.asarray(propagation_loss1)

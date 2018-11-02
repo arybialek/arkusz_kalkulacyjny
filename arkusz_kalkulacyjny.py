@@ -6,25 +6,18 @@ import os #os.system('clear') gdzie sensownie jest wrzucić czyszczenie ekranu?
 frequency = 2400 #[MHz] 
 wave_length = 300/frequency #[m] 
 
-#changeable variables - inputs from user
-#length = 4 #[km] 
-#base_height = 62 #[m] 
-#subscriber_height = 10 #[m] 
-#medium_height = 13 #[m] 
-
-#da się to ładniej zrobić?
 ########################################################################################################################
 def usr_input():
     while True:
         try:
-            length = float(input("Podaj odległość między antenami, wyrażoną w metrach, w granicach między 200m a 8310m: "))        
+            length = float(input("Podaj odległość między antenami, wyrażoną w metrach, w granicach między 0.2km a 8.31km: "))        
             
         except:            
             print("Wpisałeś niepoprawną wartość! Spróbuj ponownie.")
             os.system('clear')
             continue
         else:
-            if 200 <= length <= 8310:
+            if 0.2 <= length <= 8.31:
                 break
             else:
                 print('Wpisałeś niepoprawną wartość! Spróbuj ponownie.')
