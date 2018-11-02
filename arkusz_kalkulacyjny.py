@@ -17,55 +17,53 @@ wave_length = 300/frequency #[m]
 def usr_input():
     while True:
         try:
-            length = int(input("Podaj odległość między antenami, wyrażoną w metrach, w granicach między 200m a 8310m: "))        
+            length = float(input("Podaj odległość między antenami, wyrażoną w metrach, w granicach między 200m a 8310m: "))        
             
         except:            
             print("Wpisałeś niepoprawną wartość! Spróbuj ponownie.")
             os.system('clear')
             continue
         else:
-            if length in range(200, 8311, 1):
-                length = np.round(length/1000, 3)
+            if 200 <= length <= 8310:
                 break
             else:
                 print('Wpisałeś niepoprawną wartość! Spróbuj ponownie.')
 
     while True:
         try:
-            base_height = int(input("Podaj wysokość zawieszenia anteny nadawczej, wyrażoną w metrach, w granicach między 30m a 120m: "))        
+            base_height = float(input("Podaj wysokość zawieszenia anteny nadawczej, wyrażoną w metrach, w granicach między 30m a 120m: "))        
             
         except:            
             print("Wpisałeś niepoprawną wartość! Spróbuj ponownie.")
             continue
         else:
-            if base_height in range(30, 121, 1):
+            if 30 <= base_height <= 120:
                 break
             else:
                 print('Wpisałeś niepoprawną wartość! Spróbuj ponownie.')
 
     while True:
         try:
-            subscriber_height = int(input("Podaj wysokość anteny odbiorczej, wyrażoną w metrach, w granicach między 3m a 48m: "))        
+            subscriber_height = float(input("Podaj wysokość anteny odbiorczej, wyrażoną w metrach, w granicach między 3m a 48m: "))        
             
         except:            
             print("Wpisałeś niepoprawną wartość! Spróbuj ponownie.")
             continue
         else:
-            if subscriber_height in range(3, 49, 1):
+            if 3 <= subscriber_height <= 48:
                 break
             else:
                 print('Wpisałeś niepoprawną wartość! Spróbuj ponownie.')   
 
     while True:    
         try:
-            medium_height = int(input("Podaj średnią wysokość dachów budynków, wyrażoną w metrach, w granicach między 1090cm a 1510cm: "))      
+            medium_height = float(input("Podaj średnią wysokość dachów budynków, wyrażoną w metrach, w granicach między 10.9m a 15.1m: "))      
             
         except:            
             print("Wpisałeś niepoprawną wartość! Spróbuj ponownie.")
             continue
         else:
-            if medium_height in range(1090, 1511, 1): #jak to zamienić na frange?
-                medium_height = np.round(medium_height/100, 3)
+            if 10.9 <= medium_height <= 15.1: 
                 break
             else:
                 print('Wpisałeś niepoprawną wartość! Spróbuj ponownie.')      
