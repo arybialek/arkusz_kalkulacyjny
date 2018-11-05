@@ -1,5 +1,6 @@
 import numpy as np
-import os #os.system('clear') gdzie sensownie jest wrzucić czyszczenie ekranu?
+import os 
+#have to do: os.system('clear')
 
 
 #constant variables
@@ -79,52 +80,57 @@ def check_if_los():
                 print('Wpisałeś niepoprawną wartość! Spróbuj ponownie.') 
     return is_los_condition
 
-
+########################################################################################################################
 #counts hp
 def p_height_func(base_height, subscriber_height, medium_height):
     p_height = 0.5 * (base_height + subscriber_height) - medium_height
     return p_height
 
+########################################################################################################################
 #counts cF
 def coefficient_f(p_height, frequency, wave_length):
     coefficient = ((4 * np.power(p_height, 2))/wave_length)
     return int(np.round(coefficient))
 
+########################################################################################################################
 #LOS1
-def los1(frequency, length, base_height, subscriber_height, medium_height, coefficient):
-    result_los1 = ( 23 + 20 * np.log10(frequency) + 16.57 * np.log10(length)
-    + (22.1 * np.log10(base_height) - 10.3 * np.log10(subscriber_height) )
-    + 8.45 * np.log10(base_height - medium_height) - 5.3 * np.log10(coefficient) )
-    return np.round(result_los1, 2) #118.6650244835433
-
-#NLOS1
-def nlos1(frequency, length, base_height, subscriber_height, medium_height):
-    result_nlos1 = ( 108.6 + (20 * np.log10(frequency)) + (21.8 * np.log10(length))
-    + ((-35 * np.log10(base_height)) + (16.6 * np.log10(subscriber_height))) 
-    - (26.3 * np.log10(base_height - medium_height)) 
-    + (23.9 * np.log10( 0.5 * (base_height - subscriber_height) ))  )
-    return np.round(result_nlos1, 2) #132.9846320870627
-
-#LOS2
-def los2(frequency, length, base_height, subscriber_height, medium_height):
-    result_los2 = ( 16.3 + 20 * np.log10(frequency) + 18.1 * np.log10(length) 
+def los1(frequency, length, base_height, subscriber_height, medium_height):
+    result_los1 = ( 16.3 + 20 * np.log10(frequency) + 18.1 * np.log10(length) 
     + ( 19.1 * np.log10(base_height) - 6.7 * np.log10(subscriber_height))
     + 12 * np.log10(base_height - medium_height)
     + 0.6 * np.log10(medium_height - subscriber_height)
     - 16.2 * np.log10( 0.5 * (base_height - subscriber_height) )  )
-    return np.round(result_los2, 2) #119.98224942273157
+    return np.round(result_los1, 2) #119.98224942273157
 
-#NLOS2
-def nlos2(frequency, length, base_height, subscriber_height, medium_height):
-    result_nlos2 = ( 83.1 + (20 * np.log10(frequency)) + (15.8 * np.log10(length))
+########################################################################################################################
+#NLOS1
+def nlos1(frequency, length, base_height, subscriber_height, medium_height):
+    result_nlos1 = ( 83.1 + (20 * np.log10(frequency)) + (15.8 * np.log10(length))
     + ( (19.1 * np.log10(base_height)) - (20 * np.log10(subscriber_height)))
-    + (47.2 * np.log10(base_height - medium_height))
+    - (47.2 * np.log10(base_height - medium_height))
     + (0.3 * np.log10(medium_height - subscriber_height))
     + (34.4 * np.log10( 0.5 * (base_height - subscriber_height) ) ) )
-    return np.round(result_nlos2, 2) #303.04692849058847
+    return np.round(result_nlos1, 2) #303.04692849058847
+
+########################################################################################################################
+#LOS2
+def los2(frequency, length, base_height, subscriber_height, medium_height, coefficient):
+    result_los2 = ( 23 + 20 * np.log10(frequency) + 16.57 * np.log10(length)
+    + (22.1 * np.log10(base_height) - 10.3 * np.log10(subscriber_height) )
+    + 8.45 * np.log10(base_height - medium_height) - 5.3 * np.log10(coefficient) )
+    return np.round(result_los2, 2) #118.6650244835433
+
+########################################################################################################################
+#NLOS2
+def nlos2(frequency, length, base_height, subscriber_height, medium_height):
+    result_nlos2 = ( 108.6 + (20 * np.log10(frequency)) + (21.8 * np.log10(length))
+    + ((-35 * np.log10(base_height)) + (16.6 * np.log10(subscriber_height))) 
+    - (26.3 * np.log10(base_height - medium_height)) 
+    + (23.9 * np.log10( 0.5 * (base_height - subscriber_height) ))  )
+    return np.round(result_nlos2, 2) #132.9846320870627
 
 
-######################################################MAIN PROGRAM#####################################################################
+##################################################### MAIN PROGRAM ####################################################################
 
 print("\n-------------- KALKULATOR WYZNACZAJĄCY STRATY PROPAGACYJNE DLA MODELU KIEDROWSKIEGO-KATULSKIEGO ------------")
 print("----------- Wykonany na potrzeby kursu Media Transmisyjne 2 projekt. Autor: Anita Rybiałek 235133. -----------\n")
@@ -148,29 +154,29 @@ while(loop):
             while (on):
                 choose = str(input("\nWybrano opcję obliczenia strat propagacyjnych dla określonego modelu.\n" +
                 "Wybierz model dla, którego chcesz obliczyć straty: \n" + " a) LOS1 \n b) NLOS1 \n c) LOS2 \n d) NLOS2 \n e) Powrót do głownego menu \nTwój wybór: "))
-                if choose in ('a', 'A'):
+                if choose in ('c', 'C'):
                     result = usr_input()
                     length, base_height, subscriber_height, medium_height = result
                     print("\n\nWpisane wartości: \nodległość między antenami: {0} [km]\nwysokość stacji nadawczej: {1} [m]\nwysokość stacji odbiorczej: {2} [m]\nśrednia wysokość dachów budynków: {3} [m]\nstała częstotliwość sygnału: 2400[MHz]".format(length, base_height, subscriber_height, medium_height))
-                    print(" \nDla przypadku LOS1 straty propacyacyjne wynoszą: {0} [dB]".format(los1(2400, length, base_height, subscriber_height, medium_height, coefficient_f(p_height_func(base_height, subscriber_height, medium_height), 2400, wave_length))))
-
-                elif choose in ('b', 'B'):
-                    result = usr_input()
-                    length, base_height, subscriber_height, medium_height = result
-                    print("\n\nWpisane wartości: \nodległość między antenami: {0} [km]\nwysokość stacji nadawczej: {1} [m]\nwysokość stacji odbiorczej: {2} [m]\nśrednia wysokość dachów budynków: {3} [m]\nstała częstotliwość sygnału: 2400[MHz]".format(length, base_height, subscriber_height, medium_height))
-                    print(" \nDla przypadku NLOS1 straty propacyacyjne wynoszą: {0} [dB]".format(nlos1(2400, length, base_height, subscriber_height, medium_height)))
-                
-                elif choose in ('c', 'C'):
-                    result = usr_input()
-                    length, base_height, subscriber_height, medium_height = result
-                    print("\n\nWpisane wartości: \nodległość między antenami: {0} [km]\nwysokość stacji nadawczej: {1} [m]\nwysokość stacji odbiorczej: {2} [m]\nśrednia wysokość dachów budynków: {3} [m]\nstała częstotliwość sygnału: 2400[MHz]".format(length, base_height, subscriber_height, medium_height))
-                    print(" \nDla przypadku LOS2 straty propacyacyjne wynoszą: {0} [dB]".format(los2(2400, length, base_height, subscriber_height, medium_height)))
+                    print(" \nDla przypadku LOS2 straty propacyacyjne wynoszą: {0} [dB]".format(los2(2400, length, base_height, subscriber_height, medium_height, coefficient_f(p_height_func(base_height, subscriber_height, medium_height), 2400, wave_length))))
 
                 elif choose in ('d', 'D'):
                     result = usr_input()
                     length, base_height, subscriber_height, medium_height = result
                     print("\n\nWpisane wartości: \nodległość między antenami: {0} [km]\nwysokość stacji nadawczej: {1} [m]\nwysokość stacji odbiorczej: {2} [m]\nśrednia wysokość dachów budynków: {3} [m]\nstała częstotliwość sygnału: 2400[MHz]".format(length, base_height, subscriber_height, medium_height))
                     print(" \nDla przypadku NLOS2 straty propacyacyjne wynoszą: {0} [dB]".format(nlos2(2400, length, base_height, subscriber_height, medium_height)))
+                
+                elif choose in ('a', 'A'):
+                    result = usr_input()
+                    length, base_height, subscriber_height, medium_height = result
+                    print("\n\nWpisane wartości: \nodległość między antenami: {0} [km]\nwysokość stacji nadawczej: {1} [m]\nwysokość stacji odbiorczej: {2} [m]\nśrednia wysokość dachów budynków: {3} [m]\nstała częstotliwość sygnału: 2400[MHz]".format(length, base_height, subscriber_height, medium_height))
+                    print(" \nDla przypadku LOS1 straty propacyacyjne wynoszą: {0} [dB]".format(los1(2400, length, base_height, subscriber_height, medium_height)))
+
+                elif choose in ('b', 'B'):
+                    result = usr_input()
+                    length, base_height, subscriber_height, medium_height = result
+                    print("\n\nWpisane wartości: \nodległość między antenami: {0} [km]\nwysokość stacji nadawczej: {1} [m]\nwysokość stacji odbiorczej: {2} [m]\nśrednia wysokość dachów budynków: {3} [m]\nstała częstotliwość sygnału: 2400[MHz]".format(length, base_height, subscriber_height, medium_height))
+                    print(" \nDla przypadku NLOS1 straty propacyacyjne wynoszą: {0} [dB]".format(nlos1(2400, length, base_height, subscriber_height, medium_height)))
                 
                 elif choose in ('e', 'E'):
                     print("\nPowrót do głównego menu.\n")
@@ -188,16 +194,16 @@ while(loop):
             print("\n\nWpisane wartości: \nodległość między antenami: {0} [m]\nwysokość stacji nadawczej: {1} [m]\nwysokość stacji odbiorczej: {2} [m]\nśrednia wysokość dachów budynków: {3} [m]\nstała częstotliwość sygnału: 2400[MHz] \nCzy na drodze propagacji fali znajdują się przeszkody?: {4}".format(length, base_height, subscriber_height, medium_height, is_los_condition))
 
             if subscriber_height >= medium_height and is_los_condition == 'nie':
-                print(" \nJest to przypadek LOS1, a straty propacyacyjne wynoszą: {0} [dB]".format(los1(2400, length, base_height, subscriber_height, medium_height, coefficient_f(p_height_func(base_height, subscriber_height, medium_height), 2400, wave_length))))
+                print(" \nJest to przypadek LOS2, a straty propacyacyjne wynoszą: {0} [dB]".format(los2(2400, length, base_height, subscriber_height, medium_height, coefficient_f(p_height_func(base_height, subscriber_height, medium_height), 2400, wave_length))))
 
             elif subscriber_height >= medium_height and is_los_condition == 'tak':
-                print(" \nJest to przypadek NLOS1, a straty propacyacyjne wynoszą: {0} [dB]".format(nlos1(2400, length, base_height, subscriber_height, medium_height)))
+                print(" \nJest to przypadek NLOS2, a straty propacyacyjne wynoszą: {0} [dB]".format(nlos2(2400, length, base_height, subscriber_height, medium_height)))
 
             elif subscriber_height < medium_height and is_los_condition == 'nie':
-                print(" \nJest to przypadek LOS2, a straty propacyacyjne wynoszą: {0} [dB]".format(los2(2400, length, base_height, subscriber_height, medium_height)))
+                print(" \nJest to przypadek LOS1, a straty propacyacyjne wynoszą: {0} [dB]".format(los1(2400, length, base_height, subscriber_height, medium_height)))
 
             elif subscriber_height < medium_height and is_los_condition == 'tak':
-                print(" \nJest to przypadek NLOS2, a straty propacyacyjne wynoszą: {0} [dB]".format(nlos2(2400, length, base_height, subscriber_height, medium_height)))
+                print(" \nJest to przypadek NLOS1, a straty propacyacyjne wynoszą: {0} [dB]".format(nlos1(2400, length, base_height, subscriber_height, medium_height)))
 
         elif ans == 3:
             print("\nZakończono działanie programu.\n")
