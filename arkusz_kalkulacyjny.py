@@ -7,15 +7,26 @@ import os
 frequency = 2400 #[MHz] 
 wave_length = 300/frequency #[m] 
 
-########################################################################################################################
+
+
+##################### FUNCTIONS ########################
+
 def usr_input():
+    '''
+    Function that takes data from the user.
+
+    Returns: 
+        length (float)
+        base_height (float)
+        subscriber_height (float)
+        medium_height (float)
+    '''
     while True:
         try:
             length = float(input("Podaj odległość między antenami, wyrażoną w metrach, w granicach między 0.2km a 8.31km: "))        
             
         except:            
-            print("Wpisałeś niepoprawną wartość! Spróbuj ponownie.")
-            os.system('clear')
+            print("Wpisałeś niepoprawną wartość! Spróbuj ponownie.")            
             continue
         else:
             if 0.2 <= length <= 8.31:
@@ -64,8 +75,17 @@ def usr_input():
             
     return length, base_height, subscriber_height, medium_height
 
-########################################################################################################################
+
 def check_if_los():
+    '''
+    Function which asks if there is an obstacle
+    on the propagation path. 
+
+    Returns: 
+        is_los_condition (str): if "yes" then there is an obstacle,
+                                if "nie" then the condition of LOS 
+                                is fulfilled.
+    '''
     while True:    
         try:
             is_los_condition = str(input("Czy na drodze propagacji fali znajdują się przeszkody? Odpowiedz tak/nie: "))      
@@ -80,21 +100,59 @@ def check_if_los():
                 print('Wpisałeś niepoprawną wartość! Spróbuj ponownie.') 
     return is_los_condition
 
-########################################################################################################################
-#counts hp
+
 def p_height_func(base_height, subscriber_height, medium_height):
+    '''
+    The function that calculates the value of the parameter h_p 
+    needed to determine the value of the coefficient c_F.
+
+    Args: 
+        base_height (float)
+        subscriber_height (float)
+        medium_height (float)
+
+    Returns: 
+        p_height (float)
+
+    '''
     p_height = 0.5 * (base_height + subscriber_height) - medium_height
     return p_height
 
-########################################################################################################################
-#counts cF
+
 def coefficient_f(p_height, frequency, wave_length):
+    '''
+    The function that calculates the value of the coefficient c_F 
+    needed to determine the value for the LOS2 situation.
+
+    Args: 
+        p_height (float)
+        frequency (int)
+        wave_length (float)
+
+    Returns: 
+        coefficient (int)
+
+    '''
     coefficient = ((4 * np.power(p_height, 2))/wave_length)
     return int(np.round(coefficient))
 
-########################################################################################################################
-#LOS1
+
 def los1(frequency, length, base_height, subscriber_height, medium_height):
+    '''
+    The function which calculates the propagation attenuation 
+    value for LOS1 situation.
+
+    Args: 
+        frequency (int)
+        length (float)
+        base_height (float)
+        subscriber_height (float)
+        medium_height (float)
+
+    Returns: 
+        result_los1 (float)
+
+    '''
     result_los1 = ( 16.3 + 20 * np.log10(frequency) + 18.1 * np.log10(length) 
     + ( 19.1 * np.log10(base_height) - 6.7 * np.log10(subscriber_height))
     + 12 * np.log10(base_height - medium_height)
@@ -102,9 +160,23 @@ def los1(frequency, length, base_height, subscriber_height, medium_height):
     - 16.2 * np.log10( 0.5 * (base_height - subscriber_height) )  )
     return np.round(result_los1, 2) 
 
-########################################################################################################################
-#NLOS1
+
 def nlos1(frequency, length, base_height, subscriber_height, medium_height):
+    '''
+    The function which calculates the propagation attenuation 
+    value for NLOS1 situation.
+
+    Args: 
+        frequency (int)
+        length (float)
+        base_height (float)
+        subscriber_height (float)
+        medium_height (float)
+
+    Returns: 
+        result_nlos1 (float)
+
+    '''
     result_nlos1 = ( 83.1 + (20 * np.log10(frequency)) + (15.8 * np.log10(length))
     + ( (19.1 * np.log10(base_height)) - (20 * np.log10(subscriber_height)))
     - (47.2 * np.log10(base_height - medium_height))
@@ -112,17 +184,46 @@ def nlos1(frequency, length, base_height, subscriber_height, medium_height):
     + (34.4 * np.log10( 0.5 * (base_height - subscriber_height) ) ) )
     return np.round(result_nlos1, 2) 
 
-########################################################################################################################
-#LOS2
+
 def los2(frequency, length, base_height, subscriber_height, medium_height, coefficient):
+    '''
+    The function which calculates the propagation attenuation 
+    value for LOS2 situation.
+
+    Args: 
+        frequency (int)
+        length (float)
+        base_height (float)
+        subscriber_height (float)
+        medium_height (float)
+        coefficient (int)
+
+    Returns: 
+        result_los2 (float)
+
+    '''
     result_los2 = ( 23 + 20 * np.log10(frequency) + 16.57 * np.log10(length)
     + (22.1 * np.log10(base_height) - 10.3 * np.log10(subscriber_height) )
     + 8.45 * np.log10(base_height - medium_height) - 5.3 * np.log10(coefficient) )
     return np.round(result_los2, 2) 
 
-########################################################################################################################
-#NLOS2
+
 def nlos2(frequency, length, base_height, subscriber_height, medium_height):
+    '''
+    The function which calculates the propagation attenuation 
+    value for NLOS2 situation.
+
+    Args: 
+        frequency (int)
+        length (float)
+        base_height (float)
+        subscriber_height (float)
+        medium_height (float)
+
+    Returns: 
+        result_nlos2 (float)
+
+    '''
     result_nlos2 = ( 108.6 + (20 * np.log10(frequency)) + (21.8 * np.log10(length))
     + ((-35 * np.log10(base_height)) + (16.6 * np.log10(subscriber_height))) 
     - (26.3 * np.log10(base_height - medium_height)) 
@@ -130,23 +231,24 @@ def nlos2(frequency, length, base_height, subscriber_height, medium_height):
     return np.round(result_nlos2, 2) 
 
 
-##################################################### MAIN PROGRAM ####################################################################
 
-print("\n-------------- KALKULATOR WYZNACZAJĄCY STRATY PROPAGACYJNE DLA MODELU KIEDROWSKIEGO-KATULSKIEGO ------------")
-print("----------- Wykonany na potrzeby kursu Media Transmisyjne 2 projekt. Autor: Anita Rybiałek 235133. -----------\n")
-print("\nZasada działania programu: ")
-print("Program pobiera od użytkownika wartości niezbędne do określenia jednego z 4 charakterystycznych przypadków modelu: ")
-print("LOS1, NLOS1, LOS2, NLOS2, następnie wylicza straty propagacyjne dla konkretnego modelu." +  
-" Częstotliwość sygnału jest stała i wynosi 2400[MHz]\n")
-
+#################### MAIN PROGRAM ######################
 
 loop = True
 while(loop):
+    
+    print("\n-------------- KALKULATOR WYZNACZAJĄCY STRATY PROPAGACYJNE DLA MODELU KIEDROWSKIEGO-KATULSKIEGO ------------")
+    print("----------- Wykonany na potrzeby kursu Media Transmisyjne 2 projekt. Autor: Anita Rybiałek 235133. -----------\n")
+    print("\nZasada działania programu: ")
+    print("Program pobiera od użytkownika wartości niezbędne do określenia jednego z 4 charakterystycznych przypadków modelu: ")
+    print("LOS1, NLOS1, LOS2, NLOS2, następnie wylicza straty propagacyjne dla konkretnego modelu." +  
+    " Częstotliwość sygnału jest stała i wynosi 2400[MHz]\n")
+
     print("\nMenu programu. Wybierz, co chcesz zrobić. \n" +
     "[ 1 ] Obliczyć straty propagacyjne dla określonego modelu. \n" +
     "[ 2 ] Nie wiem jaki konkretnie model użyć. Chcę podać jedynie wartości.\n"+    
     "[ 3 ] Zakończyć program.\n")
-
+    
     try: 
         ans = int(input("Twój wybór: "))
         if ans == 1:
@@ -208,7 +310,9 @@ while(loop):
         elif ans == 3:
             print("\nZakończono działanie programu.\n")
             loop = False
+
         else:     
             print("\nWpisałeś niepoprawną wartość! Spróbuj ponownie.\n")
+
     except ValueError:
         print("\nWpisz cyfrę!\n")    
