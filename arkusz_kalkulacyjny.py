@@ -1,6 +1,6 @@
 import numpy as np
-import os 
-#have to do: os.system('clear')
+import os
+import time
 
 
 #constant variables
@@ -23,10 +23,10 @@ def usr_input():
     '''
     while True:
         try:
-            length = float(input("Podaj odległość między antenami, wyrażoną w metrach, w granicach między 0.2km a 8.31km: "))        
-            
-        except:            
-            print("Wpisałeś niepoprawną wartość! Spróbuj ponownie.")            
+            length = float(input("\nPodaj odległość między antenami, wyrażoną w kilometrach, w granicach między 0.2km a 8.31km: "))
+
+        except ValueError:
+            print("Wpisałeś niepoprawną wartość! Spróbuj ponownie.")
             continue
         else:
             if 0.2 <= length <= 8.31:
@@ -38,7 +38,7 @@ def usr_input():
         try:
             base_height = float(input("Podaj wysokość zawieszenia anteny nadawczej, wyrażoną w metrach, w granicach między 30m a 120m: "))        
             
-        except:            
+        except ValueError:            
             print("Wpisałeś niepoprawną wartość! Spróbuj ponownie.")
             continue
         else:
@@ -51,7 +51,7 @@ def usr_input():
         try:
             subscriber_height = float(input("Podaj wysokość anteny odbiorczej, wyrażoną w metrach, w granicach między 3m a 48m: "))        
             
-        except:            
+        except ValueError:            
             print("Wpisałeś niepoprawną wartość! Spróbuj ponownie.")
             continue
         else:
@@ -64,7 +64,7 @@ def usr_input():
         try:
             medium_height = float(input("Podaj średnią wysokość dachów budynków, wyrażoną w metrach, w granicach między 10.9m a 15.1m: "))      
             
-        except:            
+        except ValueError:            
             print("Wpisałeś niepoprawną wartość! Spróbuj ponownie.")
             continue
         else:
@@ -90,7 +90,7 @@ def check_if_los():
         try:
             is_los_condition = str(input("Czy na drodze propagacji fali znajdują się przeszkody? Odpowiedz tak/nie: "))      
             
-        except:            
+        except ValueError:            
             print("Wpisałeś niepoprawną wartość! Spróbuj ponownie.")
             continue
         else:
@@ -234,61 +234,72 @@ def nlos2(frequency, length, base_height, subscriber_height, medium_height):
 
 #################### MAIN PROGRAM ######################
 
+menu = ("\n-------------- KALKULATOR WYZNACZAJĄCY STRATY PROPAGACYJNE DLA MODELU KIEDROWSKIEGO-KATULSKIEGO ------------\n" +
+        "----------- Wykonany na potrzeby kursu Media Transmisyjne 2 projekt. Autor: Anita Rybiałek 235133. -----------\n" +
+        "\nZasada działania programu: " +
+        "Program pobiera od użytkownika wartości niezbędne do określenia jednego z 4 charakterystycznych przypadków modelu: " +
+        "LOS1, NLOS1, LOS2, NLOS2, następnie wylicza straty propagacyjne dla konkretnego modelu." +
+        " Częstotliwość sygnału jest stała i wynosi 2400[MHz]\n" +
+        "\nMenu programu. Wybierz, co chcesz zrobić.\n" +
+        "[ 1 ] Obliczyć straty propagacyjne dla określonego modelu. \n" +
+        "[ 2 ] Nie wiem jaki konkretnie model użyć. Chcę podać jedynie wartości.\n" +
+        "[ 3 ] Zakończyć program.\n")
+
 loop = True
 while(loop):
-    
-    print("\n-------------- KALKULATOR WYZNACZAJĄCY STRATY PROPAGACYJNE DLA MODELU KIEDROWSKIEGO-KATULSKIEGO ------------")
-    print("----------- Wykonany na potrzeby kursu Media Transmisyjne 2 projekt. Autor: Anita Rybiałek 235133. -----------\n")
-    print("\nZasada działania programu: ")
-    print("Program pobiera od użytkownika wartości niezbędne do określenia jednego z 4 charakterystycznych przypadków modelu: ")
-    print("LOS1, NLOS1, LOS2, NLOS2, następnie wylicza straty propagacyjne dla konkretnego modelu." +  
-    " Częstotliwość sygnału jest stała i wynosi 2400[MHz]\n")
 
-    print("\nMenu programu. Wybierz, co chcesz zrobić. \n" +
-    "[ 1 ] Obliczyć straty propagacyjne dla określonego modelu. \n" +
-    "[ 2 ] Nie wiem jaki konkretnie model użyć. Chcę podać jedynie wartości.\n"+    
-    "[ 3 ] Zakończyć program.\n")
+    os.system('clear')
+    print(menu)
     
     try: 
-        ans = int(input("Twój wybór: "))
+        ans = int(input("\nTwój wybór: "))
         if ans == 1:
             on = True
             while (on):
-                choose = str(input("\nWybrano opcję obliczenia strat propagacyjnych dla określonego modelu.\n" +
-                "Wybierz model dla, którego chcesz obliczyć straty: \n" + " a) LOS1 \n b) NLOS1 \n c) LOS2 \n d) NLOS2 \n e) Powrót do głownego menu \nTwój wybór: "))
+                os.system('clear')
+                print("\nWybrano opcję obliczenia strat propagacyjnych dla określonego modelu.\n")
+
+                choose = str(input("Wybierz model dla, którego chcesz obliczyć straty: \n" + " a) LOS1 \n b) NLOS1 \n c) LOS2 \n d) NLOS2 \n e) Powrót do głownego menu \n\nTwój wybór: "))
                 if choose in ('c', 'C'):
                     result = usr_input()
                     length, base_height, subscriber_height, medium_height = result
                     print("\n\nWpisane wartości: \nodległość między antenami: {0} [km]\nwysokość stacji nadawczej: {1} [m]\nwysokość stacji odbiorczej: {2} [m]\nśrednia wysokość dachów budynków: {3} [m]\nstała częstotliwość sygnału: 2400[MHz]".format(length, base_height, subscriber_height, medium_height))
                     print(" \nDla przypadku LOS2 straty propacyacyjne wynoszą: {0} [dB]".format(los2(2400, length, base_height, subscriber_height, medium_height, coefficient_f(p_height_func(base_height, subscriber_height, medium_height), 2400, wave_length))))
+                    _ = input("\nNaciśnij ENTER, by powrócić do poprzedniego menu.")
 
                 elif choose in ('d', 'D'):
                     result = usr_input()
                     length, base_height, subscriber_height, medium_height = result
                     print("\n\nWpisane wartości: \nodległość między antenami: {0} [km]\nwysokość stacji nadawczej: {1} [m]\nwysokość stacji odbiorczej: {2} [m]\nśrednia wysokość dachów budynków: {3} [m]\nstała częstotliwość sygnału: 2400[MHz]".format(length, base_height, subscriber_height, medium_height))
                     print(" \nDla przypadku NLOS2 straty propacyacyjne wynoszą: {0} [dB]".format(nlos2(2400, length, base_height, subscriber_height, medium_height)))
-                
+                    _ = input("\nNaciśnij ENTER, by powrócić do poprzedniego menu.")
+
                 elif choose in ('a', 'A'):
                     result = usr_input()
                     length, base_height, subscriber_height, medium_height = result
                     print("\n\nWpisane wartości: \nodległość między antenami: {0} [km]\nwysokość stacji nadawczej: {1} [m]\nwysokość stacji odbiorczej: {2} [m]\nśrednia wysokość dachów budynków: {3} [m]\nstała częstotliwość sygnału: 2400[MHz]".format(length, base_height, subscriber_height, medium_height))
                     print(" \nDla przypadku LOS1 straty propacyacyjne wynoszą: {0} [dB]".format(los1(2400, length, base_height, subscriber_height, medium_height)))
+                    _ = input("\nNaciśnij ENTER, by powrócić do poprzedniego menu.")
 
                 elif choose in ('b', 'B'):
                     result = usr_input()
                     length, base_height, subscriber_height, medium_height = result
                     print("\n\nWpisane wartości: \nodległość między antenami: {0} [km]\nwysokość stacji nadawczej: {1} [m]\nwysokość stacji odbiorczej: {2} [m]\nśrednia wysokość dachów budynków: {3} [m]\nstała częstotliwość sygnału: 2400[MHz]".format(length, base_height, subscriber_height, medium_height))
                     print(" \nDla przypadku NLOS1 straty propacyacyjne wynoszą: {0} [dB]".format(nlos1(2400, length, base_height, subscriber_height, medium_height)))
-                
+                    _ = input("\nNaciśnij ENTER, by powrócić do poprzedniego menu.")
+
                 elif choose in ('e', 'E'):
-                    print("\nPowrót do głównego menu.\n")
                     on = False
                 else: 
                     print("Wpisałeś niepoprawną wartość! Spróbuj ponownie.")
+                    time.sleep(2)
+                    os.system('clear')
                     continue
 
         elif ans == 2:
-            print("\nWybrano opcję podania wartości bez ustalonego modelu propagacyjnego. Proszę podać wartości: ")
+            os.system('clear')
+            print("\nWybrano opcję podania wartości bez ustalonego modelu propagacyjnego. Proszę podać wartości:\n")
+
             result = usr_input()
             length, base_height, subscriber_height, medium_height = result
             is_los_condition = check_if_los()
@@ -307,12 +318,17 @@ while(loop):
             elif subscriber_height < medium_height and is_los_condition == 'tak':
                 print(" \nJest to przypadek NLOS1, a straty propacyacyjne wynoszą: {0} [dB]".format(nlos1(2400, length, base_height, subscriber_height, medium_height)))
 
+            _ = input("\nNaciśnij ENTER, by powrócić do poprzedniego menu.")
+
         elif ans == 3:
             print("\nZakończono działanie programu.\n")
             loop = False
 
         else:     
             print("\nWpisałeś niepoprawną wartość! Spróbuj ponownie.\n")
+            time.sleep(3)
+            os.system('clear')
 
     except ValueError:
-        print("\nWpisz cyfrę!\n")    
+        print("\nWpisz cyfrę!\n")
+        time.sleep(3)
