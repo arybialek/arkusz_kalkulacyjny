@@ -237,7 +237,7 @@ def nlos2(frequency, length, base_height, subscriber_height, medium_height):
 menu = ("\n-------------- KALKULATOR WYZNACZAJĄCY STRATY PROPAGACYJNE DLA MODELU KIEDROWSKIEGO-KATULSKIEGO ------------\n" +
         "----------- Wykonany na potrzeby kursu Media Transmisyjne 2 projekt. Autor: Anita Rybiałek 235133. -----------\n" +
         "\nZasada działania programu: " +
-        "Program pobiera od użytkownika wartości niezbędne do określenia jednego z 4 charakterystycznych przypadków modelu: " +
+        "Program pobiera od użytkownika wartości niezbędne do określenia jednego z 4 charakterystycznych przypadków modelu: \n" +
         "LOS1, NLOS1, LOS2, NLOS2, następnie wylicza straty propagacyjne dla konkretnego modelu." +
         " Częstotliwość sygnału jest stała i wynosi 2400[MHz]\n" +
         "\nMenu programu. Wybierz, co chcesz zrobić.\n" +
